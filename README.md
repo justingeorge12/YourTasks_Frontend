@@ -1,4 +1,4 @@
-**TASK MANAGEMENTL**  
+                       **TASK MANAGEMENT**  
   
 Overview  
 The Simple Task Management project is a lightweight, web-based application designed to help users manage their daily tasks effectively. Built with Django and React, this project allows users to create, update, delete, and organize their tasks easily.
