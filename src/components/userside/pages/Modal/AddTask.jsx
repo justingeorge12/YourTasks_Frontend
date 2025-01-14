@@ -24,19 +24,54 @@ function AddTask({onClose, taskToEdit, fetchTasks, project_id}) {
 
         try {
             if (taskToEdit) {
-                const res = await api.patch(`/tasks/${taskToEdit.id}/`, { name });
-                console.log(res, 'task updated');
-                toast.success('task updated successfully');
+                try{
+                    const res = await api.patch(`/tasks/${taskToEdit.id}/`, { name });
+                    toast.success('task updated successfully');
+                    onClose();
+                    fetchTasks()
+                }
+                catch(err) {
+                    console.log(err)
+                    if (err.status === 400 ){
+                        if (err.response.data?.non_field_errors?.[0] === "The fields project, name must make a unique set."){
+                            console.log(err)
+                            toast.error('task name is already exists')
+                        } 
+                        else{
+                            toast.error('there is some issue, please try again after sometime')
+                        }
+                    }
+
+                }
             } 
             else {
                 console.log(project_id, 'roooooooo')
-                const res = await api.post(`/tasks/`, {project:project_id, name });
-                console.log(res, 'task created');
-                toast.success('task created successfully');
+                try{
+                    const res = await api.post(`/tasks/`, {project:project_id, name });
+                    toast.success('task is created successfully')
+                    onClose();
+                    fetchTasks()
+                }
+                catch(err) {
+                    console.log(err)
+                    if (err.status === 400 ){
+                        if (err.response.data?.non_field_errors?.[0] === "The fields project, name must make a unique set."){
+                            console.log(err)
+                            toast.error('task name is already exists')
+                        } 
+                        else{
+                            toast.error('there is some issue, please try again after sometime')
+                            onClose()
+                        }
+                    }
+                    else{
+                        toast.error('there is some issue, please try again after sometime')
+                        onClose()
+                    }
+                }
                 
             }
-            onClose();
-            fetchTasks()
+            
         }
         catch (err) {
             console.log(err)
@@ -47,7 +82,7 @@ function AddTask({onClose, taskToEdit, fetchTasks, project_id}) {
     return(
         <div className='fixed inset-0  bg-black bg-opacity-50 flex items-center justify-center z-50 p-10'>
             <div className="relative bg-black m-10 mx-14 border border-slate-600 rounded-md p-6 scroll-auto w-[400px]">
-                <h1 className="text-2xl font-bold text-center mb-6 text-slate-400">Add Task</h1>
+                <h1 className="text-2xl font-bold text-center mb-6 text-slate-400">{taskToEdit ? 'Edit Task':'Add Task'}</h1>
                 <div className="absolute top-4 right-4 bg-slate-800 rounded-md px-2 hover:text-red-600" >
                     <button onClick={() => onClose()} > ✕ </button>
                 </div>

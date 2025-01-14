@@ -24,8 +24,38 @@ function Register() {
         }
     };
 
+    const validateEmail = (email) => {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
+    };
+
+    const validatePassword = (password) => {
+        const hasCapitalLetter = /[A-Z]/.test(password);
+        return hasCapitalLetter && password.length > 5;
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        if (!formData.username || !formData.password) {
+            toast.error("Username and password are required.");
+            return;
+        }
+
+        if (!formData.email) {
+            toast.error('email is required')
+            return
+        }
+
+        if (!validateEmail(formData.email)) {
+            toast.error("Invalid email format");
+            return;
+        }
+
+        if (!validatePassword(formData.password)) {
+            setPasswordError("Password must contain at least one capital letter and be longer than 5 characters");
+            return;
+        }
 
         if (formData.password !== formData.confirmPassword) {
             setPasswordError("Passwords do not match");

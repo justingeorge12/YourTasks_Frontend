@@ -16,6 +16,11 @@ function Login() {
     const handleSubmit = async (e) => {
         e.preventDefault()
 
+        if (!username || !password) {
+            toast.error("Username and password are required.");
+            return;
+        }
+
         try{
             const res = await api.post('/token/', {username, password})
 
@@ -27,7 +32,13 @@ function Login() {
         catch (err) {
             console.log(err)
             if (err.status === 401) {
-                toast.error('your credentails are not correct')
+                if (err.response.data?.detail === "No active account found with the given credentials"){
+                    toast.error('No account with the credentials')
+                }
+                else{
+
+                    toast.error('your credentails are not correct')
+                }
             }
             else{
                 toast.error('there is some error please try again')

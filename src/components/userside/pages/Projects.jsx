@@ -59,7 +59,7 @@ function Projects() {
                 <h1 className="text-2xl font-semibold">Projects</h1>
             </div>
             <div className="right-0 absolute mr-10">
-                <button onClick={() => setAddProject(true)} className="border border-lime-400 rounded-md px-2 py-1"> Add Project </button>
+                <button onClick={() => {setAddProject(true); setProjectToEdit('')}} className="border border-lime-400 rounded-md px-2 py-1"> Add Project </button>
             </div>
             
             <div className="mx-28 mt-10">
@@ -87,6 +87,7 @@ function Projects() {
                     </tbody>
                 </table>
             </div>
+            
             {addProject && <AddProject onClose={() => setAddProject(false)} project={projectToEdit} fetchProjects={fetchProjects} />}
             {deleteModal && <CommonModal onClose={() => setDeleteModal(false) } message={'delete the project'} func={handleDeleteProject} />}
         </div>

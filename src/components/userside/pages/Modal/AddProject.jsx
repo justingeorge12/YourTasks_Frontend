@@ -24,16 +24,49 @@ function AddProject({onClose, project , fetchProjects}) {
 
         try {
             if (project) {
-              const res = await api.put(`/projects/${project.id}/`, { name });
-              console.log(res, 'Project updated');
-              toast.success('Project updated successfully');
+
+                try{
+
+                    const res = await api.put(`/projects/${project.id}/`, { name });
+                    console.log(res, 'Project updated');
+                    toast.success('Project updated successfully');
+                    onClose();
+                    fetchProjects()
+                }
+                catch(err) {
+                    if (err.status === 400 ){
+                        if (err.response.data?.name?.[0] === "project with this name already exists."){
+                            console.log(err)
+                            toast.error('task name is already exists')
+                        } 
+                        else{
+                            toast.error('there is some issue, please try again after sometime')
+                        }
+                    }
+                }
+
             } else {
-              const res = await api.post('/projects/', { name });
-              console.log(res, 'Project created');
-              toast.success('Project created successfully');
+                try{
+                    const res = await api.post('/projects/', { name });
+                    console.log(res, 'Project created');
+                    toast.success('Project created successfully');
+                    onClose();
+                    fetchProjects()
+                }
+                catch(err) {
+                    console.log(err)
+                    if (err.status === 400 ){
+                        if (err.response.data?.name?.[0] === "project with this name already exists."){
+                            console.log(err)
+                            toast.error('task name is already exists')
+                        } 
+                        else{
+                            toast.error('there is some issue, please try again after sometime')
+                        }
+                    }
+                }
             }
-            onClose();
-            fetchProjects()
+            
         }
         catch (err) {
             console.log(err)
@@ -44,7 +77,7 @@ function AddProject({onClose, project , fetchProjects}) {
     return(
         <div className='fixed inset-0  bg-black bg-opacity-50 flex items-center justify-center z-50 p-10'>
             <div className="relative bg-black m-10 mx-14 border border-slate-600 rounded-md p-6 scroll-auto w-[400px]">
-                <h1 className="text-2xl font-bold text-center mb-6 text-slate-400">Add Project</h1>
+                <h1 className="text-2xl font-bold text-center mb-6 text-slate-400">{project ? 'Edit Project':'Add Project'}</h1>
                 <div className="absolute top-4 right-4 bg-slate-800 rounded-md px-2 hover:text-red-600" >
                     <button onClick={() => onClose()} > ✕ </button>
                 </div>

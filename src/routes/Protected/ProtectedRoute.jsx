@@ -35,9 +35,6 @@ function ProtectedRoute({children}) {
         const token = localStorage.getItem('access_token')
         const role = localStorage.getItem('role')
 
-        console.log(role, 'rooooooooole')
-
-        
 
         if (!token) {
             setIsAuthorized(false)
