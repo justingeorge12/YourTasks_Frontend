@@ -15,6 +15,10 @@ function Projects() {
     const [deleteProjectId, setDeleteProjectId] = useState(null)
     const [deleteModal, setDeleteModal] = useState(false)
 
+    useEffect(() => {
+        console.log('heyyyy')
+    }, [])
+
     const fetchProjects = async () => {
         try{
             const res = await api.get('/projects/')

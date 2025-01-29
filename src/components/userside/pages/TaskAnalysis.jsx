@@ -84,3 +84,72 @@ function TaskAnalysis() {
 }
 
 export default TaskAnalysis;
+
+
+
+
+    // const ws = useRef(null);
+
+    // useEffect(() => {
+    //     ws.current = new WebSocket(`ws://127.0.0.1:8000/ws/tasks/${project_id}/`);
+
+    //     ws.current.onmessage = (event) => {
+    //         const data = JSON.parse(event.data);
+    //         if (data.message.action === "updated") {
+    //             fetchTasks(); // Refresh tasks when a new update is received
+    //         }
+    //     };
+
+    //     ws.current.onclose = () => console.log("WebSocket disconnected");
+
+    //     return () => ws.current.close();
+    // }, [project_id]);
+
+
+
+    // useEffect(() => {
+    //     const socket = new WebSocket(`ws://127.0.0.1:8000/ws/tasks/${project_id}/`);
+    
+    //     socket.onmessage = (event) => {
+    //         const data = JSON.parse(event.data);
+    //         setTasks((prevTasks) => {
+    //             const index = prevTasks.findIndex((task) => task.id === data.id);
+    //             if (index >= 0) {
+    //                 // Update existing task
+    //                 const updatedTasks = [...prevTasks];
+    //                 updatedTasks[index] = data;
+    //                 return updatedTasks;
+    //             } else {
+    //                 // Add new task
+    //                 return [...prevTasks, data];
+    //             }
+    //         });
+    //     };
+    
+    //     socket.onclose = () => console.log("WebSocket closed.");
+    //     return () => socket.close();
+    // }, [project_id]);
+    
+
+    // useEffect(() => {
+    //     const ws = new WebSocket(`ws://127.0.0.1:8000/ws/project/${project_id}/`);
+
+    //     ws.onmessage = (event) => {
+    //         const data = JSON.parse(event.data);
+    //         setTasks((prevTasks) => {
+    //             const updatedTasks = prevTasks.map((task) =>
+    //                 task.id === data.id ? { ...task, ...data } : task
+    //             );
+    //             return updatedTasks.some((task) => task.id === data.id)
+    //                 ? updatedTasks
+    //                 : [...prevTasks, data];
+    //         });
+    //     };
+
+    //     ws.onclose = () => console.log("WebSocket closed");
+
+    //     return () => ws.close();
+    // }, [project_id]);
+
+
+    

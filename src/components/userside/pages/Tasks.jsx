@@ -21,70 +21,81 @@ function Tasks() {
     const [deleteModal, setDeleteModal ] = useState(false)
 
 
+    const socket = useRef(null);
+
+        useEffect(() => {
+            // socket.current = new WebSocket('ws://localhost:8000/ws/tasks/');
+            
+            socket.current = new WebSocket('ws://yourtask.justingeorge.site/ws/tasks/');
 
 
-    // const ws = useRef(null);
+            socket.current.onopen = () => {
+                console.log('WebSocket connected');
+            };
 
+            socket.current.onmessage = (event) => {
+                const data = JSON.parse(event.data);
+                const newTask = data.task;
+                setTasks((prevTasks) => [...prevTasks, newTask]);
+            };
+
+            socket.current.onerror = (error) => {
+                console.error('WebSocket error:', error);
+            };
+
+            socket.current.onclose = (event) => {
+                if (event.wasClean) {
+                    console.log('WebSocket closed cleanly');
+                } else {
+                    console.error('WebSocket closed unexpectedly');
+                }
+            };
+
+            return () => {
+                socket.current.close();
+            };
+        }, []); 
+
+        
     // useEffect(() => {
-    //     ws.current = new WebSocket(`ws://127.0.0.1:8000/ws/tasks/${project_id}/`);
-
-    //     ws.current.onmessage = (event) => {
-    //         const data = JSON.parse(event.data);
-    //         if (data.message.action === "updated") {
-    //             fetchTasks(); // Refresh tasks when a new update is received
-    //         }
-    //     };
-
-    //     ws.current.onclose = () => console.log("WebSocket disconnected");
-
-    //     return () => ws.current.close();
-    // }, [project_id]);
-
-
-
-    // useEffect(() => {
-    //     const socket = new WebSocket(`ws://127.0.0.1:8000/ws/tasks/${project_id}/`);
+    //     console.log('heyyyyy')
+    //     // Establish WebSocket connection
+    //     const socket = new WebSocket('ws://localhost:8000/ws/tasks/');
     
+    //     // Log when the connection is successfully established
+    //     socket.onopen = () => {
+    //         console.log('WebSocket connection establishedddd');
+    //     };
+    
+    //     // Handle incoming messages
     //     socket.onmessage = (event) => {
     //         const data = JSON.parse(event.data);
-    //         setTasks((prevTasks) => {
-    //             const index = prevTasks.findIndex((task) => task.id === data.id);
-    //             if (index >= 0) {
-    //                 // Update existing task
-    //                 const updatedTasks = [...prevTasks];
-    //                 updatedTasks[index] = data;
-    //                 return updatedTasks;
-    //             } else {
-    //                 // Add new task
-    //                 return [...prevTasks, data];
-    //             }
-    //         });
+    //         console.log('new daaata')
+    //         const newTask = data.task;
+    //         setTasks((prevTasks) => [...prevTasks, newTask]);
     //     };
     
-    //     socket.onclose = () => console.log("WebSocket closed.");
-    //     return () => socket.close();
-    // }, [project_id]);
+    //     // Handle connection errors
+    //     socket.onerror = (error) => {
+    //         console.error('WebSocket error:', error);
+    //     };
+    
+    //     // Log when the connection is closed
+    //     socket.onclose = (event) => {
+    //         if (event.wasClean) {
+    //           console.log('WebSocket closed cleanly');
+    //         } else {
+    //           console.error('WebSocket closed unexpectedly');
+    //         }
+    //       };
+    
+    //     return () => {
+    //         socket.close(); // Clean up the WebSocket connection when the component unmounts
+    //     };
+    // }, []);
     
 
-    // useEffect(() => {
-    //     const ws = new WebSocket(`ws://127.0.0.1:8000/ws/project/${project_id}/`);
 
-    //     ws.onmessage = (event) => {
-    //         const data = JSON.parse(event.data);
-    //         setTasks((prevTasks) => {
-    //             const updatedTasks = prevTasks.map((task) =>
-    //                 task.id === data.id ? { ...task, ...data } : task
-    //             );
-    //             return updatedTasks.some((task) => task.id === data.id)
-    //                 ? updatedTasks
-    //                 : [...prevTasks, data];
-    //         });
-    //     };
-
-    //     ws.onclose = () => console.log("WebSocket closed");
-
-    //     return () => ws.close();
-    // }, [project_id]);
 
 
 
@@ -214,7 +225,7 @@ function Tasks() {
                     </tbody>
                 </table>
             </div>
-            {addTasksModal && <AddTask onClose={() => setAddTasksModal(false)} fetchTasks={fetchTasks} project_id={project_id}/>}
+            {addTasksModal && <AddTask onClose={() => setAddTasksModal(false)} fetchTasks={fetchTasks} project_id={project_id} socket={socket.current}/>}
             {editModalOpen && <AddTask onClose={() => setEditModalOpen(false)} fetchTasks={fetchTasks} taskToEdit={taskToEdit} project_id={project_id} />}
             {deleteModal && <CommonModal onClose={() => setDeleteModal(false)} message={'delete the Task'} func={handleDeleteTask}/>}
         </div>

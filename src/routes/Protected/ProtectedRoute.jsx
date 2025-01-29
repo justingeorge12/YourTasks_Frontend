@@ -8,8 +8,6 @@ import {jwtDecode} from 'jwt-decode'
 function ProtectedRoute({children}) {
     const [isAuthorized, setIsAuthorized] = useState(null)
 
-    
-
     const refreshToken = async () => {
         const refreshToken = localStorage.getItem('refresh_token')
         try{
