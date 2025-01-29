@@ -26,7 +26,7 @@ function Tasks() {
         useEffect(() => {
             // socket.current = new WebSocket('ws://localhost:8000/ws/tasks/');
             
-            socket.current = new WebSocket('ws://yourtask.justingeorge.site/ws/tasks/');
+            socket.current = new WebSocket('wss://yourtask.justingeorge.site/ws/tasks/');
 
 
             socket.current.onopen = () => {
